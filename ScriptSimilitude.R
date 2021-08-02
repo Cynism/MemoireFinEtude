@@ -6,7 +6,7 @@ setwd("chemin du dossier de téléchargement")
 # Initialisation des packages
 library(vegan)
 
-par(mfrow=c(1,1))
+par(mfrow=c(1,3))
 
 # Import des données .csv situées dans le Working Directory
 data1205LRdG_TUN <- read.table("Relevés12-05-2021_LRdG_TUN.csv", header=TRUE, sep=";")
