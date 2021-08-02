@@ -18,6 +18,12 @@ data0306LRdG_240UN <- read.table("Relevés03-06-2021_LRdG_240UN.csv", header=TRU
 data2306Manu <- read.table("Relevés23-06-2021_Manu.csv", header=TRUE, sep=";")
 
 dataPartenaireT32 <- read.table("EssaiPartenaireT32jours.csv", header=TRUE, sep=";")
+# Réarrangement de l'ordre des répétition. De base elles n'étaient pas dans l'ordre.
+dataPartenaireT32$N.Produit_Dose = fct_relevel(dataPartenaireT32$N.Produit_Dose, c( 
+  "1-Temoin", "2-Keynote_08", "3_RevystarXL_04", 
+  "4_RevystarXL_08", "5_RevystarXL_12", "6_CodeA_066",
+  "7_CodeA_1325", "8_CodeA_20", "9_CodeB_10",
+  "10-RevyXB_06", "11-Atrium+Pavecto60_05+12", "12-Imtrex+Sulky_08+08"))
 # Melting des données = A chaque modalité (12 lignes) on étudie 25 feuilles (25 colonnes). Le melting
 # permet donc de synthétiser les 25 colonnes en 1 seule : "value" et devant chaque individu se retrouve
 # les variables associées (ici : les colonnes 1 à 3), et le reste des colonnes (4 à 28) forme les lignes.
@@ -26,8 +32,22 @@ dataPartenaireT32 <- read.table("EssaiPartenaireT32jours.csv", header=TRUE, sep=
 dataPartenaireT32 <- melt(dataPartenaireT32,id=1:3)
 
 dataPartenaireT40 <- read.table("EssaiPartenaireT40jours.csv", header=TRUE, sep=";")
+dataPartenaireT40$N.Produit_Dose = fct_relevel(dataPartenaireT40$N.Produit_Dose, c( 
+  "1-Temoin", "2-Keynote_08", "3_RevystarXL_04", 
+  "4_RevystarXL_08", "5_RevystarXL_12", "6_CodeA_066",
+  "7_CodeA_1325", "8_CodeA_20", "9_CodeB_10",
+  "10-RevyXB_06", "11-Atrium+Pavecto60_05+12", "12-Imtrex+Sulky_08+08"))
 dataPartenaireT40 <- melt(dataPartenaireT40,id=1:3)
 
+dataPartenaireTot <- read.table("EssaiPartenaireT32T40.csv", header=TRUE, sep=";")
+dataPartenaireTot$N.Produit_Dose = fct_relevel(dataPartenaireTot$N.Produit_Dose, c( 
+  "1-Temoin", "2-Keynote_08", "3_RevystarXL_04", 
+  "4_RevystarXL_08", "5_RevystarXL_12", "6_CodeA_066",
+  "7_CodeA_1325", "8_CodeA_20", "9_CodeB_10",
+  "10-RevyXB_06", "11-Atrium+Pavecto60_05+12", "12-Imtrex+Sulky_08+08"))
+
+dataPartenaireTotT32 <- melt(dataPartenaireTot,id=1:3,measure= 4)
+dataPartenaireTotT40 <- melt(dataPartenaireTot,id=1:3,measure= 5)
 
 # LRdG 12/05 ----
 
@@ -71,13 +91,27 @@ sim2306_Manu = anosim(m_com2306_Manu, data2306Manu$ï..Repet, distance = "euclid
 plot(sim2306_Manu)
 
 # Partenaire T32 ----
+# version sans les moyennes
 comPartenaire_T32 = dataPartenaireT32[,5]
 m_comPartenaire_T32 = as.matrix(comPartenaire_T32)
 simPartenaire_T32 = anosim(m_comPartenaire_T32, dataPartenaireT32$N.Produit_Dose, distance = "euclidean", permutations = 999);simPartenaire_T32
 plot(simPartenaire_T32)
 
+# version avec les moyennes
+comPartenaire_TotT32 = dataPartenaireTotT32[,5]
+m_comPartenaire_TotT32 = as.matrix(comPartenaire_TotT32)
+simPartenaire_TotT32 = anosim(m_comPartenaire_TotT32, dataPartenaireTotT32$N.Produit_Dose, distance = "euclidean", permutations = 9999);simPartenaire_TotT32
+plot(simPartenaire_TotT32)
+
 # Partenaire T40 ----
+# version sans les moyennes
 comPartenaire_T40 = dataPartenaireT40[,5]
 m_comPartenaire_T40 = as.matrix(comPartenaire_T40)
 simPartenaire_T40 = anosim(m_comPartenaire_T40, dataPartenaireT40$N.Produit_Dose, distance = "euclidean", permutations = 999);simPartenaire_T40
 plot(simPartenaire_T40)
+
+# version avec les moyennes
+comPartenaire_TotT40 = dataPartenaireTotT40[,5]
+m_comPartenaire_TotT40 = as.matrix(comPartenaire_TotT40)
+simPartenaire_TotT40 = anosim(m_comPartenaire_TotT40, dataPartenaireTotT40$N.Produit_Dose, distance = "euclidean", permutations = 9999);simPartenaire_TotT40
+plot(simPartenaire_TotT40)
