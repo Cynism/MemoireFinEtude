@@ -1,10 +1,23 @@
 setwd("chemin du dossier de téléchargement")
 
 # installation des packages R
-'install.packages("vegan")'
+'install.packages("vegan")
+install.packages("tidyverse")
+install.packages("ggpubr")
+install.packages("rstatix")
+install.packages("ggplot2")
+install.packages("UsingR")
+install.packages("reshape2")'
 
 # Initialisation des packages
 library(vegan)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(ggplot2)
+library(UsingR)
+library(forcats)
+library(reshape2)
 
 par(mfrow=c(1,3))
 
